@@ -1,0 +1,36 @@
+{
+  "name": "didi3",
+  "version": "0.1.1",
+  "description": "didi framework based on fis3",
+  "main": "ididi.js",
+  "bin": {
+    "didi3": "bin/didi"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.xiaojukeji.com/yupengfei/didi3.git"
+  },
+  "keywords": [
+    "didi3",
+    "fis3",
+    "didi",
+    "fis"
+  ],
+  "author": "yupengfei@didichuxing.com",
+  "license": "BSD",
+  "dependencies": {
+    "didi-command-init": "^0.1.2",
+    "didi-command-release": "0.0.13",
+    "didi-command-server": "0.8.0",
+    "fis3": "3.4.32",
+    "liftoff": "2.2.1",
+    "fis3-hook-components": "1.0.4",
+    "fis-postprocessor-jswrapper": "0.0.12",
+    "fis-postprocessor-require-async": "0.0.9",
+    "fis-parser-less": ">=0.1.0",
+    "fis-deploy-default": "0.1.3"
+  }
+}
