@@ -137,6 +137,8 @@ function parseJsAync(content, file){
                     }
                     break;
                 case 'require':
+                    // fis3解析器不再支持require语法, 因此需要将原有require语法转为__require来使用.
+                    m = "__require(" + resolve(value, file);
                     break;
             }
         } else if (comment) {
