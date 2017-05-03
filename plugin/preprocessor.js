@@ -27,7 +27,7 @@ function CSS(content, file){
             });
         }
         return m;
-    });
+    }, file);
 }
 function JS(content, file){
     if(!file.isMod){
@@ -43,7 +43,7 @@ function JS(content, file){
             });
         }
         return m;
-    });
+    }, file);
 }
 function HTML(content, file){
     return !file.isMod ? content : fis.compile.extHtml(content, function (m, $1, $2, $3, $4, $5, $6, $7, $8) {
@@ -76,7 +76,7 @@ function HTML(content, file){
             }) + $8;
         }
         return m;
-    });
+    }, file);
 }
 
 function trim(str) {

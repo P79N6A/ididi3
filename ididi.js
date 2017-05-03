@@ -27,38 +27,36 @@ if (isPreview) {
     postpackager.push(require('./plugin/smarty-config.js'));
 }
 
-
 // 设置匹配配置.
 // fis3 采用match方式配置内置__match属性
 // 因此需要额外的setKey才可以全局获取配置参数
 var map = [{
-    reg: '**.{css,less}',
+    reg: '*.{css,less}',
     rules: {
         parser: fis.plugin('less', {}),
         preprocessor: preprocessor.CSS,
-        release: '${releaseDir}$&',
+        release: '${releaseDir}$0',
         isMod: true
     }
 }, {
-    reg: '**.html',
+    reg: '*.html',
     rules: {
         preprocessor: preprocessor.HTML
     }
 }, {
-    reg: '**.{tmpl, tpl}',
+    reg: '*.{tmpl, tpl}',
     rules: {
-        // optimizer: fis.plugin('html-minifier'),
-        useOptimizer: false,
         release: false,
         isJsLike: true,
         parser: fis.plugin('utc', {})
     }
 }, {
     // 所有的js, 默认jswrapper, 且使用amd.
-    reg: /.*\.js/,
+    reg: '*.js',
     rules: {
+        umd2commonjs: false,
         preprocessor: preprocessor.JS,
-        release: '${releaseDir}$&',
+        release: '${releaseDir}$0',
         isMod: true,
         postprocessor: fis.plugin('jswrapper', {
             type: 'amd'
@@ -69,6 +67,12 @@ var map = [{
     rules: {
         isMod: true,
         postprocessor: fis.plugin('require-async', {}, 'append')
+    }
+}, {
+    reg: /\/page\/([^\/]+)\/main\.html/,
+    rules: {
+        isMod: true,
+        release: 'page/$1.html'
     }
 }, {
     reg: /.+?(png|jpeg|jpg|gif)$/,
@@ -196,8 +200,10 @@ var map = [{
     // autoload插件解决资源加载问题.
     reg: '::packager',
     rules: {
-        spriter: fis.plugin('csssprites'),
-        postpackager: fis.plugin('autoload')
+        postpackager: [
+            fis.plugin('autoload'),
+            // fis.plugin('loader')
+        ]
     }
 }];
 
@@ -230,4 +236,41 @@ fis.set('settings.postpackager.autoload', {
     notice: {
         exclude: [/.*/]
     }
+});
+
+
+
+fis.media('prod')
+.match('::package', {
+    packager: fis.plugin('map'),
+    spriter: fis.plugin('csssprites')
+})
+.match('*.css', {
+    useHash: true,
+    optimizer: fis.plugin('clean-css')
+})
+.match('*.js', {
+    useHash: true,
+    optimizer: fis.plugin('uglify-js')
+})
+.match('*.tpl', {
+    optimizer: fis.plugin('html-minifier')
+})
+.match('/node_modules/{*,**/*}.js', {
+    packTo: '/static/release/allnode.js'
+}); 
+
+fis.hook('commonjs', {
+    baseUrl: '/node_modules/',
+    extList: ['.js', '.jsx', '.es', '.ts', '.tsx']
+});
+
+fis.match('node_modules/**.js', {
+    isMod: true,
+    useSameNameRequire: true
+});
+
+fis.hook('node_modules', {
+    baseUrl: '/node_modules',
+    shutup: true
 });
