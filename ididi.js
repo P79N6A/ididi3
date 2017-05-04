@@ -19,6 +19,9 @@ var releaseDir = '/static/release/';
 
 var postpackager = ['autoload'];
 
+// Inject release sameNameRequire change
+require('./plugin/release.js');
+
 // TODO
 var argv = process.argv;
 var isPreview = !(~argv.indexOf('-d') || ~argv.indexOf('--dest'));
@@ -52,7 +55,7 @@ var map = [{
     }
 }, {
     // 所有的js, 默认jswrapper, 且使用amd.
-    reg: '*.js',
+    reg: '{*,/**/*}.js',
     rules: {
         umd2commonjs: false,
         preprocessor: preprocessor.JS,
@@ -129,6 +132,8 @@ var map = [{
 }, {
     reg: /^\/components\/([^\/]+)\/\1\.js$/i,
     rules: {
+        ignoreDependencies: true,
+        umd2commonjs: false,
         id: '$1',
         isMod: true,
         release: '${releaseDir}/$&'
@@ -143,6 +148,8 @@ var map = [{
 }, {
     reg: /^\/components\/(.*\.js)$/i,
     rules: {
+        ignoreDependencies: true,
+        umd2commonjs: false,
         id: '$1',
         isMod: true,
         release: '${releaseDir}/$&'
@@ -189,12 +196,6 @@ var map = [{
     rules: {
         release: '${releaseDir}$0',
         isMod: false
-    }
-}, {
-    // fis3默认不开启同名依赖.
-    reg: '**',
-    rules: {
-        useSameNameRequire: true
     }
 }, {
     // autoload插件解决资源加载问题.
@@ -265,9 +266,9 @@ fis.hook('commonjs', {
     extList: ['.js', '.jsx', '.es', '.ts', '.tsx']
 });
 
-fis.match('node_modules/**.js', {
-    isMod: true,
-    useSameNameRequire: true
+fis.match('node_modules/{*,**/*}.js', {
+    umd2commonjs:true,
+    isMod: true
 });
 
 fis.hook('node_modules', {
