@@ -39,6 +39,7 @@
     "fis-postprocessor-jswrapper": "0.0.12",
     "fis-postprocessor-require-async": "0.0.9",
     "fis-spriter-csssprites": "0.3.11",
+    "fis-parser-babel-5.x": "1.4.0",
     "fis3": "3.4.32",
     "fis3-hook-commonjs": "^0.1.26",
     "fis3-hook-components": "1.0.4",
