@@ -61,11 +61,11 @@ var map = [{
         preprocessor: preprocessor.JS,
         release: '${releaseDir}$0',
         isMod: true,
-        // parser: fis.plugin('babel-5.x', {
-        //     loose: [ "es6.modules" ], // 允许非function内部的代码写return;
-        //     blacklist: [ "useStrict" ], // 转换后不强制严格模式
-        //     compact: false // 禁止提示size exceed 100kb
-        // }),
+        parser: fis.plugin('babel-5.x', {
+            loose: [ "es6.modules" ], // 允许非function内部的代码写return;
+            blacklist: [ "useStrict" ], // 转换后不强制严格模式
+            compact: false // 禁止提示size exceed 100kb
+        }),
         postprocessor: fis.plugin('jswrapper', {
             type: 'amd'
         }, 'append')
